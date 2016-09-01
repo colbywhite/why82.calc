@@ -46,6 +46,7 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+/out/
 
 # Translations
 *.mo
@@ -90,3 +91,13 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Why83 artifact
+why82-*.zip
+
+# Serverless work dir
+.serverless
+
+# Vagrant
+.vagrant
+
+node_modules/python-deps/node_modules

@@ -1,0 +1,61 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: why82-lambda
+
+plugins:
+  - python-deps
+
+provider:
+  name: aws
+  runtime: python2.7
+  region: us-west-2
+  timeout: 30
+  stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource:
+        Fn::Join:
+          - ''
+          - - "arn:aws:s3:::"
+            - Ref: DataBucket
+            - '/*'
+
+package:
+  exclude:
+    - tests
+    - out
+    - .idea
+    - .vagrant
+    - why82.tar.gz
+    - invoke.yaml
+    - README.md
+    - .coverage
+    - why82.lambda.iml
+    - __pycache__
+
+functions:
+  stats:
+    handler: save_stats.lambda_handler
+#      - schedule: rate(10 minutes)
+
+resources:
+  Resources:
+    DataBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-${opt:stage}
+        CorsConfiguration:
+          CorsRules:
+            - MaxAge: 3600
+              AllowedOrigins:
+                - http://*.why82.com
+              AllowedMethods:
+                - GET
+  Outputs:
+     DataBucket:
+       Description: 'The bucket where stats will be stored'
+       Value:
+         Ref: DataBucket
