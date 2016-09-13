@@ -8,6 +8,11 @@ from why82.s3_recorder import S3Recorder
 import why82.tiers as tiers
 
 
+# noinspection PyUnusedLocal
+def lambda_handler(event, context):
+    save_tiers(_date.today(), event)
+
+
 def calc_tiers(stats):
     return json.dumps(tiers.calc(stats))
 
