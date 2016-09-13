@@ -14,7 +14,7 @@ def calc_tiers(stats):
 
 def save_tiers(save_date, stats):
     tier_json = calc_tiers(stats)
-    S3Recorder.record(save_date, tier_json)
+    S3Recorder.record(save_date, 'tiers', tier_json)
 
 
 def date(string):
