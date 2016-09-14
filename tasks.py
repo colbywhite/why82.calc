@@ -1,9 +1,11 @@
 from invoke import task
 import why82.infrastructure.deploy_stack as inf
 
+
 @task
 def test(ctx):
     ctx.run('nosetests --with-coverage --cover-package=why82 --cover-inclusive --cover-erase')
+
 
 @task
 def deps(ctx):
