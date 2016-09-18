@@ -5,6 +5,8 @@ import requests
 NBA_SCOREBOARD_URL = 'http://stats.nba.com/stats/scoreboardV2'
 NBA_LEAGUE_ID = '00'
 NBA_API_HEADERS = {'Referer': 'http://stats.nba.com/scores/', 'User-Agent': 'curl/7.43.0'}
+ABBREVIATION_ADJUSTMENTS = {'PHX': 'PHO', 'CHA': 'CHO', 'BKN': 'BRK'}
+INCORRECT_ABBREVIATIONS = ABBREVIATION_ADJUSTMENTS.keys()
 
 
 def get_multi_day_schedule(start_date, num=7):
@@ -25,11 +27,17 @@ def get_schedule(start_date, offset):
 
 def parse_game_teams(game_info):
     teams = game_info.split('/')[1]
-    away_abbr = teams[:3]
-    home_abbr = teams[3:]
+    away_abbr = correct_abbreviations(teams[:3])
+    home_abbr = correct_abbreviations(teams[3:])
     return {'home': home_abbr, 'away': away_abbr}
 
 
 def parse_game_date(game_info):
     date_string = game_info.split('/')[0]
     return datetime.strptime(date_string, '%Y%m%d').date()
+
+
+def correct_abbreviations(abbr):
+    if abbr in INCORRECT_ABBREVIATIONS:
+        return ABBREVIATION_ADJUSTMENTS[abbr]
+    return abbr
