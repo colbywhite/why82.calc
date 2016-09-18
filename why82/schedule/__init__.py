@@ -1,10 +1,7 @@
 from datetime import datetime
 
-import requests
+import nba_api_client as nba
 
-NBA_SCOREBOARD_URL = 'http://stats.nba.com/stats/scoreboardV2'
-NBA_LEAGUE_ID = '00'
-NBA_API_HEADERS = {'Referer': 'http://stats.nba.com/scores/', 'User-Agent': 'curl/7.43.0'}
 ABBREVIATION_ADJUSTMENTS = {'PHX': 'PHO', 'CHA': 'CHO', 'BKN': 'BRK'}
 INCORRECT_ABBREVIATIONS = ABBREVIATION_ADJUSTMENTS.keys()
 
@@ -16,10 +13,7 @@ def get_multi_day_schedule(start_date, num=7):
 
 
 def get_schedule(start_date, offset):
-    params = {'GameDate': start_date.strftime('%Y-%m-%d'), 'LeagueID': NBA_LEAGUE_ID, 'DayOffset': offset}
-    response = requests.get(NBA_SCOREBOARD_URL, params=params, headers=NBA_API_HEADERS)
-    response.raise_for_status()
-    game_strings = response.json()['resultSets'][0]['rowSet']
+    game_strings = nba.v2scoreboard(start_date, offset)['resultSets'][0]['rowSet']
     date = parse_game_date(game_strings[0][5])
     games = map(lambda x: parse_game_teams(x[5]), game_strings)
     return {date: games}
