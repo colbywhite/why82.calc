@@ -7,15 +7,11 @@ import why82.schedule as sked
 
 # noinspection PyUnusedLocal
 def lambda_handler(event, context):
-    calc_schedule(_date.today())
+    calc_schedule(_date.today(), 7)
 
 
-def calc_schedule(start_date):
-    return sked.get_seven_day_schedule(start_date)
-
-
-def calc_schedule_offset(start_date, offset):
-    return sked.get_schedule(start_date, offset)
+def calc_schedule(start_date, num):
+    return sked.get_multi_day_schedule(start_date, num)
 
 
 def date(string):
@@ -24,9 +20,9 @@ def date(string):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate a day\'s schedule with tier information')
-    parser.add_argument('--offset', '-o', default=0, type=int, help='The offset from the start date. DEFAULT=0')
-    parser.add_argument('--date', '-d', default=_date.today(), type=date, help='The start date to grab a schedule for. '
-                                                                               'DEFAULT=date.today()')
+    parser.add_argument('--amount', '-a', default=1, type=int,
+                        help='The number of days to get a schedule for, starting with START_DATE. DEFAULT=1')
+    parser.add_argument('--date', '-d', metavar='START_DATE', default=_date.today(), type=date,
+                        help='The start date to grab a schedule for. DEFAULT=date.today()')
     args = parser.parse_args()
-    # print(calc_schedule_offset(args.date, args.offset))
-    print(calc_schedule(args.date))
+    print(calc_schedule(args.date, args.amount))

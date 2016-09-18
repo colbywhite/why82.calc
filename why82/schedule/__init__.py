@@ -7,11 +7,10 @@ NBA_LEAGUE_ID = '00'
 NBA_API_HEADERS = {'Referer': 'http://stats.nba.com/scores/', 'User-Agent': 'curl/7.43.0'}
 
 
-def get_seven_day_schedule(start_date):
+def get_multi_day_schedule(start_date, num=7):
     return reduce(lambda result, offset:
                   dict(result.items() + get_schedule(start_date, offset).items()),
-                  range(0, 6),
-                  {})
+                  range(0, num), {})
 
 
 def get_schedule(start_date, offset):
