@@ -16,8 +16,8 @@ class GetScheduleTest(TestCase):
     def setUp(self):
         nba.v2scoreboard = self.v2scoreboard
 
-    def test_get_schedule(self):
-        schedule = sked.get_schedule(date(2016, 2, 3), 1)
+    def test_get_single_day_schedule(self):
+        schedule = sked.get_single_day_schedule(date(2016, 2, 3), 1)
         dates = schedule.keys()
         eq_(len(dates), 1)
         day = dates[0]

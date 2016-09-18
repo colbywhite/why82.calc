@@ -8,11 +8,11 @@ INCORRECT_ABBREVIATIONS = ABBREVIATION_ADJUSTMENTS.keys()
 
 def get_multi_day_schedule(start_date, num=7):
     return reduce(lambda result, offset:
-                  dict(result.items() + get_schedule(start_date, offset).items()),
+                  dict(result.items() + get_single_day_schedule(start_date, offset).items()),
                   range(0, num), {})
 
 
-def get_schedule(start_date, offset):
+def get_single_day_schedule(start_date, offset):
     game_strings = nba.v2scoreboard(start_date, offset)['resultSets'][0]['rowSet']
     date = parse_game_date(game_strings[0][5])
     games = map(lambda x: parse_game_teams(x[5]), game_strings)
