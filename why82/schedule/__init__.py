@@ -1,3 +1,4 @@
+from copy import deepcopy
 from datetime import datetime
 
 import nba_api_client as nba
@@ -35,3 +36,17 @@ def correct_abbreviations(abbr):
     if abbr in INCORRECT_ABBREVIATIONS:
         return ABBREVIATION_ADJUSTMENTS[abbr]
     return abbr
+
+
+def grade_schedule(schedule, tiers):
+    result = {}
+    for day in schedule.keys():
+        graded_games = []
+        for game in schedule[day]:
+            graded_game = {'home': {'abbreviated_name': game['home']},
+                           'away': {'abbreviated_name': game['away']}}
+            # graded_game['grade'] = grade(game)
+            graded_games.append(graded_game)
+        formatted_day = day.strftime('%Y-%m-%d')
+        result[formatted_day] = graded_games
+    return result
