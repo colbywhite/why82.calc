@@ -49,8 +49,23 @@ def grade_schedule(schedule, tiers):
                            'away': deepcopy(tiers[away_abbrev])}
             graded_game['home']['abbreviated_name'] = home_abbrev
             graded_game['away']['abbreviated_name'] = away_abbrev
-            # graded_game['grade'] = grade(game)
+            graded_game['grade'] = grade_game(graded_game)
             graded_games.append(graded_game)
         formatted_day = day.strftime('%Y-%m-%d')
         result[formatted_day] = graded_games
     return result
+
+
+def grade_game(game):
+    # use pace tier for now
+    home_pace_tier = game['home']['pace']['tier']
+    away_tier = game['away']['pace']['tier']
+    if home_pace_tier == 3 or away_tier == 3:
+        return 'D'
+    elif home_pace_tier == 1 and away_tier == 1:
+        return 'A'
+    elif home_pace_tier == 2 and away_tier == 2:
+        return 'C'
+    else:
+        # these are 2v1 games
+        return 'B'
