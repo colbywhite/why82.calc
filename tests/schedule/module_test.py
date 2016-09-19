@@ -1,11 +1,12 @@
 from datetime import date, timedelta
+from decimal import Decimal
 from unittest import TestCase
 
 from nose.tools import *
 
 import tests.utils as utils
-import why82.schedule.nba_api_client as nba
 import why82.schedule as sked
+import why82.schedule.nba_api_client as nba
 
 
 class GetScheduleTest(TestCase):
@@ -67,3 +68,7 @@ class GradeScheduleTest(TestCase):
         game = game[0]
         eq_('DET', game['home']['abbreviated_name'])
         eq_('NYK', game['away']['abbreviated_name'])
+        eq_(3, game['home']['pace']['tier'])
+        eq_(Decimal('95.1'), game['home']['pace']['pace'])
+        eq_(3, game['away']['pace']['tier'])
+        eq_(Decimal('93.4'), game['away']['pace']['pace'])

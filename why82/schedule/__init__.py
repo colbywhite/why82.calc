@@ -43,8 +43,12 @@ def grade_schedule(schedule, tiers):
     for day in schedule.keys():
         graded_games = []
         for game in schedule[day]:
-            graded_game = {'home': {'abbreviated_name': game['home']},
-                           'away': {'abbreviated_name': game['away']}}
+            home_abbrev = game['home']
+            away_abbrev = game['away']
+            graded_game = {'home': deepcopy(tiers[home_abbrev]),
+                           'away': deepcopy(tiers[away_abbrev])}
+            graded_game['home']['abbreviated_name'] = home_abbrev
+            graded_game['away']['abbreviated_name'] = away_abbrev
             # graded_game['grade'] = grade(game)
             graded_games.append(graded_game)
         formatted_day = day.strftime('%Y-%m-%d')
