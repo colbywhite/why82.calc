@@ -60,14 +60,8 @@ class GradeScheduleTest(TestCase):
         eq_(10, len(self.graded_schedule['2016-02-05']))
 
     def test_game_contents(self):
-        game = self.get_single_game('DET', '2016-02-04')
-        eq_('DET', game['home']['abbreviated_name'])
-        eq_('NYK', game['away']['abbreviated_name'])
-        eq_(3, game['home']['pace']['tier'])
-        eq_(Decimal('95.1'), game['home']['pace']['pace'])
-        eq_(3, game['away']['pace']['tier'])
-        eq_(Decimal('93.4'), game['away']['pace']['pace'])
-        eq_('D', game['grade'])
+        expected_schedule = utils.get_json_resource('2016-02-03-schedule')
+        eq_(expected_schedule, self.graded_schedule)
 
     def test_grade_a_grading(self):
         game = self.get_single_game('WAS', '2016-02-03')
