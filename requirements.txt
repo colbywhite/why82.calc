@@ -2,6 +2,7 @@ boto3==1.4.0
 botocore==1.4.51
 coverage==4.2
 docutils==0.12
+futures==3.0.5
 invoke==0.13.0
 jmespath==0.9.0
 lxml==3.6.4

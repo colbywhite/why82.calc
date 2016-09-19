@@ -5,6 +5,7 @@ from datetime import datetime
 import simplejson as json
 
 import why82.schedule as sked
+from why82.s3_recorder import S3Recorder
 
 
 # noinspection PyUnusedLocal
@@ -18,7 +19,8 @@ def calc_schedule(start_date, num):
 
 def grade_schedule(start_date, num, tiers):
     schedule = calc_schedule(start_date, num)
-    return json.dumps(sked.grade_schedule(schedule, tiers))
+    schedule_json = json.dumps(sked.grade_schedule(schedule, tiers))
+    S3Recorder.record(start_date, 'schedule', schedule_json)
 
 
 def date(string):
