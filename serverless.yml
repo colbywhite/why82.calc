@@ -1,7 +1,7 @@
 # For full config options, check the docs:
 #    docs.serverless.com
 
-service: why82-lambda
+service: why82-calc
 
 plugins:
   - python-deps
@@ -37,11 +37,11 @@ package:
     - __pycache__
 
 functions:
-  stats:
-    handler: save_stats.lambda_handler
-#      - schedule: rate(10 minutes)
   tiers:
     handler: calc_tiers.lambda_handler
+#      - s3: something
+  schedule:
+    handler: calc_schedule.lambda_handler
 #      - s3: something
 
 resources:

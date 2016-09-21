@@ -3,9 +3,10 @@ import troposphere.iam as iam
 from botocore.exceptions import ClientError
 from troposphere import Template, Output, Ref, GetAtt, Join
 
-STACK_NAME = 'why82-ci'
-SERVICE = 'why82-lambda'
+SERVICE = 'why82-calc'
+STACK_NAME = '%s-ci' % SERVICE
 SERVICE_PROD = '%s-*' % SERVICE
+CI_USERNAME = 'codeship-%s' % SERVICE
 
 
 def create_template():
@@ -70,7 +71,7 @@ def create_template():
             'Resource': '*'
         }]
     }
-    user = iam.User(title='ciUser', UserName='codeship', Policies=[iam.Policy(PolicyDocument=policy_doc,
+    user = iam.User(title='ciUser', UserName=CI_USERNAME, Policies=[iam.Policy(PolicyDocument=policy_doc,
                                                                               PolicyName=('%s-cipolicy' % SERVICE))])
     key = iam.AccessKey(title='ciKey', UserName=Ref(user))
     cft.add_resource(user)
