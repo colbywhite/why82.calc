@@ -3,7 +3,7 @@ from unittest import TestCase
 from nose.tools import *
 
 import why82.tiers as tiers
-from tests.utils import *
+from tests.utils import get_json_resource
 
 
 class TiersCalcTest(TestCase):

@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from nose.tools import *
 
-import tests.utils as utils
+from tests.utils import get_json_resource
 import why82.schedule as sked
 import why82.schedule.nba_api_client as nba
 
@@ -12,7 +12,7 @@ import why82.schedule.nba_api_client as nba
 class GetScheduleTest(TestCase):
     def v2scoreboard(self, start_date, offset):
         name = 'NBA_scoreboardv2_%s_%d' % (start_date.strftime('%Y-%m-%d'), offset)
-        return utils.get_json_resource(name)
+        return get_json_resource(name)
 
     def setUp(self):
         nba.v2scoreboard = self.v2scoreboard
@@ -25,7 +25,7 @@ class GetScheduleTest(TestCase):
         eq_(day, date(2016, 2, 4))
         games = schedule[day]
         eq_(len(games), 4)
-        expected_games = utils.get_json_resource('NBA_schedule_2016-02-03_1')
+        expected_games = get_json_resource('NBA_schedule_2016-02-03_1')
         eq_(games, expected_games)
 
     def test_get_multi_day_schedule(self):
@@ -38,7 +38,7 @@ class GetScheduleTest(TestCase):
             offset = day - start_date
             name = 'NBA_schedule_%s_%d' % (start_date.strftime('%Y-%m-%d'), offset.days)
             games = schedule[day]
-            expected_games = utils.get_json_resource(name)
+            expected_games = get_json_resource(name)
             eq_(games, expected_games)
 
 
@@ -50,8 +50,8 @@ class GradeScheduleTest(TestCase):
         for offset in range(0, 3):
             cur_date = start_date + timedelta(days=offset)
             name = 'NBA_schedule_%s_%d' % (start_date.strftime('%Y-%m-%d'), offset)
-            self.schedule[cur_date] = utils.get_json_resource(name)
-        self.tiers = utils.get_json_resource('NBA_2016-tiers')
+            self.schedule[cur_date] = get_json_resource(name)
+        self.tiers = get_json_resource('NBA_2016-tiers')
         self.graded_schedule = sked.grade_schedule(self.schedule, self.tiers)
 
     def test_game_counts(self):
@@ -60,7 +60,7 @@ class GradeScheduleTest(TestCase):
         eq_(10, len(self.graded_schedule['2016-02-05']))
 
     def test_game_contents(self):
-        expected_schedule = utils.get_json_resource('2016-02-03-schedule')
+        expected_schedule = get_json_resource('2016-02-03-schedule')
         eq_(expected_schedule, self.graded_schedule)
 
     def test_grade_a_grading(self):
