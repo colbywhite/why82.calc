@@ -40,17 +40,17 @@ class OverallTiersTest(TestCase):
         eq_(weights['rating_diff'], 10)
 
     def test_weighted_avg(self):
-        eq_(Decimal('1.25'), self.overall_tier_info['TOR']['overall']['avg'])
-        eq_(Decimal('1.25'), self.overall_tier_info['BOS']['overall']['avg'])
-        eq_(Decimal('1.75'), self.overall_tier_info['MIA']['overall']['avg'])
-        eq_(Decimal('1.5'), self.overall_tier_info['ATL']['overall']['avg'])
-        eq_(Decimal('.75'), self.overall_tier_info['GSW']['overall']['avg'])
-        eq_(Decimal('2.25'), self.overall_tier_info['MIL']['overall']['avg'])
+        eq_(Decimal('1.5'), self.overall_tier_info['TOR']['overall']['avg'])
+        eq_(Decimal('1.5'), self.overall_tier_info['BOS']['overall']['avg'])
+        eq_(Decimal('2.25'), self.overall_tier_info['MIA']['overall']['avg'])
+        eq_(Decimal('1.75'), self.overall_tier_info['ATL']['overall']['avg'])
+        eq_(Decimal('1'), self.overall_tier_info['GSW']['overall']['avg'])
+        eq_(Decimal('3'), self.overall_tier_info['MIL']['overall']['avg'])
 
     def test_weighted_tier(self):
         eq_(Decimal('1'), self.overall_tier_info['TOR']['overall']['tier'])
         eq_(Decimal('1'), self.overall_tier_info['BOS']['overall']['tier'])
         eq_(Decimal('2'), self.overall_tier_info['MIA']['overall']['tier'])
-        eq_(Decimal('1'), self.overall_tier_info['ATL']['overall']['tier'])
+        eq_(Decimal('2'), self.overall_tier_info['ATL']['overall']['tier'])
         eq_(Decimal('1'), self.overall_tier_info['GSW']['overall']['tier'])
-        eq_(Decimal('2'), self.overall_tier_info['MIL']['overall']['tier'])
+        eq_(Decimal('3'), self.overall_tier_info['MIL']['overall']['tier'])
