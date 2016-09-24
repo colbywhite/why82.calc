@@ -1,4 +1,7 @@
-from decimal import Decimal
+from decimal import Decimal, getcontext
+
+
+getcontext().prec = 4
 
 PACE_TIER_ONE_CUTOFF = Decimal('98.5')
 PACE_TIER_TWO_CUTOFF = Decimal('97.0')
