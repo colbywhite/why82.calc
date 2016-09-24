@@ -100,4 +100,5 @@ why82-*.zip
 # Vagrant
 .vagrant
 
-node_modules/python-deps/node_modules
+# npm 
+node_modules/
