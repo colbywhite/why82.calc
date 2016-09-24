@@ -32,9 +32,18 @@ package:
     - why82.tar.gz
     - invoke.yaml
     - README.md
+    - LICENSE
+    - deps_package.sh
+    - deps_pull.sh
+    - deps_setup.sh
+    - Vagrantfile
+    - .DS_Store
+    - node_modules
+    - package.json
     - .coverage
     - why82.lambda.iml
     - __pycache__
+    - python-deps
 
 functions:
   tiers:
