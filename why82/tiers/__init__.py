@@ -42,6 +42,24 @@ def calc_win_loss(team_stats, result={}):
     return result
 
 
+RATING_DIFF_TIER_ONE_CUTOFF = Decimal('2')
+RATING_DIFF_TIER_TWO_CUTOFF = Decimal('0')
+
+
+def calc_rating_diff(team_stats, result={}):
+    for name, stats in team_stats.iteritems():
+        rating_diff = stats['rating_diff']
+        if rating_diff < RATING_DIFF_TIER_TWO_CUTOFF:
+            tier = 3
+        elif RATING_DIFF_TIER_TWO_CUTOFF <= rating_diff < RATING_DIFF_TIER_ONE_CUTOFF:
+            tier = 2
+        else:
+            tier = 1
+        team = result.get(name, {})
+        team['rating_diff'] = {'tier': tier, 'rating_diff': rating_diff}
+        result[name] = team
+    return result
+
 def calc(team_stats):
-    metric_tiers = calc_pace(team_stats, calc_win_loss(team_stats))
+    metric_tiers = calc_pace(team_stats, calc_win_loss(team_stats, calc_rating_diff(team_stats)))
     return overall.calc_overall(metric_tiers, copy.deepcopy(metric_tiers))

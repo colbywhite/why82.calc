@@ -1,4 +1,5 @@
 {
   "win_loss": 20,
-  "pace":10
+  "pace": 10,
+  "rating_diff": 10
 }
