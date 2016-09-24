@@ -1,6 +1,10 @@
 import os
 import simplejson as json
 from decimal import Decimal
+
+OVERALL_TIER_ONE_MAX = Decimal(1.666)
+OVERALL_TIER_TWO_MAX = Decimal(2.333)
+
 def calc_overall(tiers, result={}):
     weights, total_weight = load_weight_config()
     for name, info in tiers.iteritems():
@@ -11,9 +15,18 @@ def calc_overall(tiers, result={}):
             weighted_sum += Decimal(weighted_val)
         weighted_avg = weighted_sum / total_weight
         team = result.get(name, {})
-        team['overall'] = {'avg': weighted_avg}
+        team['overall'] = {'avg': weighted_avg, 'tier': calc_overall_tier(weighted_avg)}
         result[name] = team
     return result
+
+
+def calc_overall_tier(tier_avg):
+    if tier_avg <= OVERALL_TIER_ONE_MAX:
+        return 1
+    elif tier_avg > OVERALL_TIER_ONE_MAX and tier_avg <= OVERALL_TIER_TWO_MAX:
+        return 2
+    else:
+        return 3
 
 
 def load_weight_config():

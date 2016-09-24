@@ -1,5 +1,6 @@
 from decimal import Decimal, getcontext
-
+import copy
+import overall
 
 getcontext().prec = 4
 
@@ -42,4 +43,5 @@ def calc_win_loss(team_stats, result={}):
 
 
 def calc(team_stats):
-    return calc_pace(team_stats, calc_win_loss(team_stats))
+    metric_tiers = calc_pace(team_stats, calc_win_loss(team_stats))
+    return overall.calc_overall(metric_tiers, copy.deepcopy(metric_tiers))

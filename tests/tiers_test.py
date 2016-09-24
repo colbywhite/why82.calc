@@ -30,6 +30,7 @@ class TiersCalcTest(TestCase):
 class OverallTiersTest(TestCase):
     def setUp(self):
         self.tier_info = get_json_resource('NBA_2016-tiers')
+        self.overall_tier_info = overall.calc_overall(self.tier_info)
 
     def test_load_weight_config(self):
         weights, total_weight = overall.load_weight_config()
@@ -38,10 +39,17 @@ class OverallTiersTest(TestCase):
         eq_(weights['win_loss'], 20)
 
     def test_weighted_avg(self):
-        result = overall.calc_overall(self.tier_info)
-        eq_(Decimal('1.667'), result['TOR']['overall']['avg'])
-        eq_(Decimal('1.667'), result['BOS']['overall']['avg'])
-        eq_(Decimal('2.333'), result['MIA']['overall']['avg'])
-        eq_(Decimal('2'), result['ATL']['overall']['avg'])
-        eq_(Decimal('1'), result['GSW']['overall']['avg'])
-        eq_(Decimal('3'), result['MIL']['overall']['avg'])
+        eq_(Decimal('1.667'), self.overall_tier_info['TOR']['overall']['avg'])
+        eq_(Decimal('1.667'), self.overall_tier_info['BOS']['overall']['avg'])
+        eq_(Decimal('2.333'), self.overall_tier_info['MIA']['overall']['avg'])
+        eq_(Decimal('2'), self.overall_tier_info['ATL']['overall']['avg'])
+        eq_(Decimal('1'), self.overall_tier_info['GSW']['overall']['avg'])
+        eq_(Decimal('3'), self.overall_tier_info['MIL']['overall']['avg'])
+
+    def test_weighted_tier(self):
+        eq_(Decimal('2'), self.overall_tier_info['TOR']['overall']['tier'])
+        eq_(Decimal('2'), self.overall_tier_info['BOS']['overall']['tier'])
+        eq_(Decimal('2'), self.overall_tier_info['MIA']['overall']['tier'])
+        eq_(Decimal('2'), self.overall_tier_info['ATL']['overall']['tier'])
+        eq_(Decimal('1'), self.overall_tier_info['GSW']['overall']['tier'])
+        eq_(Decimal('3'), self.overall_tier_info['MIL']['overall']['tier'])
