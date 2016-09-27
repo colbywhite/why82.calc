@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 
-from why82.constants import BUCKET_NAME
+from why82.settings import BUCKET_NAME
 
 
 class S3Recorder:

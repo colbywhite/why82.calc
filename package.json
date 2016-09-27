@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
+    "serverless-plugin-write-env-vars": "^1.0.1",
     "python-deps": "file:python-deps"
   }
 }

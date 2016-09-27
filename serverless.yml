@@ -5,6 +5,12 @@ service: why82-calc
 
 plugins:
   - python-deps
+  - serverless-plugin-write-env-vars
+
+custom:
+  writeEnvVars:
+    BUCKET_NAME: ${self:service}-${opt:stage, self:provider.stage}
+    CURRENT_SEASON: 2016
 
 provider:
   name: aws
