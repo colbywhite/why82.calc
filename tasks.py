@@ -1,5 +1,6 @@
 from invoke import task
 import why82.infrastructure.deploy_stack as inf
+import why82.settings as settings
 
 
 @task
@@ -32,3 +33,7 @@ def updt(ctx):
 @task()
 def json(ctx):
     print(inf.create_template().to_json())
+
+@task
+def season(ctx):
+    print(settings.CURRENT_SEASON)
