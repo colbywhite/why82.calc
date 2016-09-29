@@ -24,14 +24,21 @@ def create_template():
             'Resource': Join(':', ['arn', 'aws', 'cloudformation', Ref('AWS::Region'), Ref('AWS::AccountId'),
                                    Join('/', ['stack', SERVICE_PROD, '*'])])
         }, {
-            'Action': ['s3:CreateBucket', 's3:ListBucket', 's3:DeleteBucket'],
+            'Action': [
+                's3:CreateBucket',
+                's3:ListBucket',
+                's3:DeleteBucket',
+                's3:PutBucketNotification'],
             'Effect': 'Allow',
             'Resource': [
                 Join(':::', ['arn:aws:s3', ('%s-serverlessdeploymentbucket-*' % SERVICE_PROD)]),
                 Join(':::', ['arn:aws:s3', SERVICE_PROD])
             ]
         }, {
-            'Action': ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
+            'Action': [
+                's3:PutObject',
+                's3:GetObject',
+                's3:DeleteObject'],
             'Effect': 'Allow',
             'Resource': [
                 Join(':::', ['arn:aws:s3', ('%s-serverlessdeploymentbucket-*/*' % SERVICE_PROD)]),
@@ -41,7 +48,6 @@ def create_template():
             'Action': ['s3:PutBucketCORS', 's3:GetBucketCORS'],
             'Effect': 'Allow',
             'Resource': Join(':::', ['arn:aws:s3', SERVICE_PROD])
-
         }, {
             'Action': [
                 'iam:CreateRole',
@@ -59,6 +65,8 @@ def create_template():
         }, {
             'Action': ['lambda:GetFunction',
                        'lambda:CreateFunction',
+                       'lambda:AddPermission',
+                       'lambda:RemovePermission',
                        'lambda:DeleteFunction',
                        'lambda:InvokeFunction',
                        'lambda:GetFunctionConfiguration',
@@ -69,6 +77,15 @@ def create_template():
             # Therefore, the policy specifies a wildcard character (*) as the Resource value.
             # http://docs.aws.amazon.com/lambda/latest/dg/access-control-identity-based.html
             'Resource': '*'
+        }, {
+            'Action': ['events:PutRule',
+                       'events:PutTargets',
+                       'events:RemoveTargets',
+                       'events:DescribeRule',
+                       'events:DeleteRule'],
+            'Effect': 'Allow',
+            'Resource': Join(':', ['arn', 'aws', 'events', Ref('AWS::Region'), Ref('AWS::AccountId'),
+                                   ('rule/%s-*' % SERVICE_PROD)])
         }]
     }
     user = iam.User(title='ciUser', UserName=CI_USERNAME, Policies=[iam.Policy(PolicyDocument=policy_doc,

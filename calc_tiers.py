@@ -22,7 +22,7 @@ def build_file_name(save_date, season):
 
 # noinspection PyUnusedLocal
 def lambda_handler(event, context):
-    save_tiers(_date.today(), event)
+    save_tiers(_date.today(), event, settings.CURRENT_SEASON)
 
 
 def calc_tiers(stats):

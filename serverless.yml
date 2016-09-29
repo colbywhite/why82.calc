@@ -54,10 +54,8 @@ package:
 functions:
   tiers:
     handler: calc_tiers.lambda_handler
-#      - s3: something
   schedule:
     handler: calc_schedule.lambda_handler
-#      - s3: something
 
 resources:
   Resources:
@@ -72,6 +70,37 @@ resources:
                 - http://*.why82.com
               AllowedMethods:
                 - GET
+        NotificationConfiguration:
+          LambdaConfigurations:
+            - Event: s3:ObjectCreated:*
+              Function:
+                'Fn::GetAtt':
+                  - ScheduleLambdaFunction
+                  - Arn
+              Filter:
+                S3Key:
+                  Rules:
+                    - Name: suffix
+                      Value: '-tiers.json'
+    ScheduleLambdaPermissionS3:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          'Fn::GetAtt':
+            - ScheduleLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: s3.amazonaws.com
+    TiersLambdaPermissionS3:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName:
+          'Fn::GetAtt':
+            - TiersLambdaFunction
+            - Arn
+        Action: lambda:InvokeFunction
+        Principal: s3.amazonaws.com
+
   Outputs:
      DataBucket:
        Description: 'The bucket where stats will be stored'
