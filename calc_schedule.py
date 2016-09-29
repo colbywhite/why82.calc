@@ -6,6 +6,8 @@ import simplejson as json
 
 import why82.schedule as sked
 from why82.s3_recorder import S3Recorder
+import why82.settings as settings
+import why82.utils as utils
 
 
 # noinspection PyUnusedLocal
@@ -19,8 +21,13 @@ def calc_schedule(start_date, num):
 
 def grade_schedule(start_date, num, tiers):
     schedule = calc_schedule(start_date, num)
-    schedule_json = json.dumps(sked.grade_schedule(schedule, tiers))
-    S3Recorder.record(start_date, 'schedule', schedule_json)
+    return json.dumps(sked.grade_schedule(schedule, tiers))
+
+
+def save_schedule(start_date, num, season, tiers):
+    schedule_json = grade_schedule(start_date, num, tiers)
+    file_name = utils.build_file_name(start_date, season, 'schedule')
+    S3Recorder.record(file_name, schedule_json)
 
 
 def date(string):
@@ -28,12 +35,23 @@ def date(string):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Generate a day\'s schedule with tier information')
+    default_season_name = int(settings.CURRENT_SEASON['name'])
+    season_help = 'The season to save the tiers in. DEFAULT=%s' % default_season_name
+    date_help = 'The start date of the generated schedule. DEFAULT=date.today()'
+    amount_help = 'The number of days to get a schedule for, starting with START_DATE. DEFAULT=1'
+
+    parser = argparse.ArgumentParser(description='Generate a schedule with tier information')
     parser.add_argument('tiers', type=argparse.FileType('r'), help='The file to use for tier information')
-    parser.add_argument('--amount', '-a', default=1, type=int,
-                        help='The number of days to get a schedule for, starting with START_DATE. DEFAULT=1')
-    parser.add_argument('--date', '-d', metavar='START_DATE', default=_date.today(), type=date,
-                        help='The start date to grab a schedule for. DEFAULT=date.today()')
+    parser.add_argument('--amount', '-a', default=1, type=int, help=amount_help)
+    parser.add_argument('--s3', action='store_true', help='Save the results to S3. Otherwise print results')
+    parser.add_argument('--date', '-d', metavar='START_DATE', default=_date.today(), type=date, help=date_help)
+    parser.add_argument('--season', '-s', default=default_season_name, type=int, help=season_help)
+
     args = parser.parse_args()
     tiers_input = json.loads(args.tiers.read())
-    print(grade_schedule(args.date, args.amount, tiers_input))
+
+    if args.s3:
+        season_info = settings.load_season_info(args.season)
+        save_schedule(args.date, args.amount, season_info, tiers_input)
+    else:
+        print(grade_schedule(args.date, args.amount, tiers_input))

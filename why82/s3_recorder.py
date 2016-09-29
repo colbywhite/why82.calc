@@ -6,8 +6,8 @@ from why82.settings import BUCKET_NAME
 
 class S3Recorder:
     @staticmethod
-    def record(date, name, json_string, overwrite=False):
-        key = '%s/%s-%s.json' % (date.year, date.strftime('%Y-%m-%d'), name)
+    def record(key, json_string, overwrite=False):
+        print('Saving %s' % key)
         if (not overwrite) and S3Recorder.does_key_exist(key):
             print('%s already exists. Not overwriting.' % key)
         else:
