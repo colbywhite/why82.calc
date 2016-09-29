@@ -7,6 +7,9 @@ load_dotenv(find_dotenv())
 def load_season_info(name):
     file_name = "%s.json" % name
     file_path = os.path.join(os.path.dirname(__file__), 'seasons', file_name)
+    if not os.path.exists(file_path):
+        print 'WARNING: %s does not exist.' % file_path
+        return {}
     with open(file_path, 'r') as f:
         info = json.loads(f.read())
     info['start'] = datetime.strptime(info['start'], '%Y-%m-%d').date()
