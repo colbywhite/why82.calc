@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "serverless-plugin-write-env-vars": "^1.0.1",
+    "env-create": "file:env-create",
     "python-deps": "file:python-deps"
   }
 }
