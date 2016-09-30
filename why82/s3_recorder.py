@@ -1,6 +1,6 @@
 import boto3
 from botocore.exceptions import ClientError
-
+import simplejson as json
 from why82.settings import BUCKET_NAME
 
 
@@ -27,3 +27,9 @@ class S3Recorder:
             return False
         else:
             return True
+
+    @staticmethod
+    def load_json_file(key):
+        s3_client = boto3.client('s3')
+        response = s3_client.get_object(Bucket=BUCKET_NAME, Key=key)
+        return json.loads(response['Body'].read())

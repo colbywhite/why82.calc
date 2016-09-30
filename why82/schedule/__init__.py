@@ -15,6 +15,8 @@ def get_multi_day_schedule(start_date, num=7):
 
 def get_single_day_schedule(start_date, offset):
     game_strings = nba.v2scoreboard(start_date, offset)['resultSets'][0]['rowSet']
+    if len(game_strings) == 0:
+        return {}
     date = parse_game_date(game_strings[0][5])
     games = map(lambda x: parse_game_teams(x[5]), game_strings)
     return {date: games}

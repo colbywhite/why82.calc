@@ -12,7 +12,12 @@ import why82.utils as utils
 
 # noinspection PyUnusedLocal
 def lambda_handler(event, context):
-    calc_schedule(_date.today(), 7)
+    key = event['Records'][0]['s3']['object']['key']
+    start_date = datetime.strptime(key,'2016/%Y-%m-%d-tiers.json').date()
+    season = settings.load_season_info(key.split('/')[0])
+    tiers = S3Recorder.load_json_file(key)
+    print('Saving 7-day schedule starting on %s' % start_date)
+    save_schedule(start_date, 7, season, tiers)
 
 
 def calc_schedule(start_date, num):
