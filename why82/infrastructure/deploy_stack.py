@@ -49,6 +49,12 @@ def create_template():
             'Effect': 'Allow',
             'Resource': Join(':::', ['arn:aws:s3', SERVICE_PROD])
         }, {
+            'Action': ['logs:DescribeLogStreams', 'logs:FilterLogEvents'],
+            'Effect': 'Allow',
+            'Resource': Join(':', ['arn', 'aws', 'logs', Ref('AWS::Region'),
+                                    Ref('AWS::AccountId'), 'log-group',
+                                   ('/aws/lambda/%s' % SERVICE_PROD)])
+        }, {
             'Action': [
                 'iam:CreateRole',
                 'iam:UpdateRole',
