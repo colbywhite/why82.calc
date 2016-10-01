@@ -17,5 +17,6 @@ def load_season_info(name):
     return info
 
 BUCKET_NAME = os.environ.get('BUCKET_NAME')
+STATS_BUCKET_NAME = os.environ.get('STATS_BUCKET_NAME')
 CURRENT_SEASON = load_season_info(os.environ.get('CURRENT_SEASON'))
 VERSION = '0.2'

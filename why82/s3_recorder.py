@@ -29,7 +29,7 @@ class S3Recorder:
             return True
 
     @staticmethod
-    def load_json_file(key):
+    def load_json_file(key, bucket=BUCKET_NAME):
         s3_client = boto3.client('s3')
-        response = s3_client.get_object(Bucket=BUCKET_NAME, Key=key)
+        response = s3_client.get_object(Bucket=bucket, Key=key)
         return json.loads(response['Body'].read())

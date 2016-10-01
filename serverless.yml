@@ -10,6 +10,7 @@ plugins:
 custom:
   writeEnvVars:
     BUCKET_NAME: ${self:service}-${opt:stage, self:provider.stage}
+    STATS_BUCKET_NAME: why82-stats-${opt:stage, self:provider.stage}
     CURRENT_SEASON: 2016
 
 provider:
@@ -21,14 +22,26 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - s3:PutObject
         - s3:GetObject
       Resource:
-        Fn::Join:
+        - Fn::Join:
           - ''
-          - - "arn:aws:s3:::"
+          - - 'arn:aws:s3:::'
             - Ref: DataBucket
-            - '/*'
+            - /*
+        - Fn::Join:
+          - ':::'
+          - - arn:aws:s3
+            - why82-stats-${opt:stage, self:provider.stage}/*
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+      Resource:
+        - Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: DataBucket
+            - /*
 
 package:
   exclude:

@@ -20,9 +20,13 @@ def build_file_name(save_date, season):
     return '%s/%s.json' % (season['name'], correct_date.strftime('%Y-%m-%d'))
 
 
-# noinspection PyUnusedLocal
 def lambda_handler(event, context):
-    save_tiers(_date.today(), event, settings.CURRENT_SEASON)
+    key = event['Records'][0]['s3']['object']['key']
+    save_date = datetime.strptime(key,'2016/%Y-%m-%d-stats.json').date()
+    season = settings.load_season_info(key.split('/')[0])
+    stats = S3Recorder.load_json_file(key, settings.STATS_BUCKET_NAME)
+    print('Saving tiers for %s' % save_date)
+    save_tiers(save_date, stats, season)
 
 
 def calc_tiers(stats):
