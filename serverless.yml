@@ -36,6 +36,7 @@ provider:
     - Effect: Allow
       Action:
         - s3:PutObject
+        - s3:PutObjectAcl
       Resource:
         - Fn::Join:
           - ''
@@ -77,13 +78,16 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:service}-${opt:stage, self:provider.stage}
+        AccessControl: PublicRead
         CorsConfiguration:
           CorsRules:
             - MaxAge: 3600
               AllowedOrigins:
                 - http://*.why82.com
+                - https://*.why82.com
               AllowedMethods:
                 - GET
+                - HEAD
         NotificationConfiguration:
           LambdaConfigurations:
             - Event: s3:ObjectCreated:*

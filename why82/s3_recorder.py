@@ -14,7 +14,7 @@ class S3Recorder:
             s3_client = boto3.resource('s3')
             s3_client.Bucket(BUCKET_NAME).put_object(
                     ContentType='application/json', Key=key,
-                    Body=json_string
+                    Body=json_string, ACL='public-read'
             )
             print('%s saved to S3' % key)
 
