@@ -45,7 +45,7 @@ def create_template():
                 Join(':::', ['arn:aws:s3', ('%s/*' % SERVICE_PROD)])
             ]
         }, {
-            'Action': ['s3:PutBucketCORS', 's3:GetBucketCORS'],
+            'Action': ['s3:PutBucketCORS', 's3:GetBucketCORS', 's3:PutBucketAcl'],
             'Effect': 'Allow',
             'Resource': Join(':::', ['arn:aws:s3', SERVICE_PROD])
         }, {
