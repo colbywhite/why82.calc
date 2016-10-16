@@ -59,9 +59,8 @@ def grade_schedule(schedule, tiers):
 
 
 def grade_game(game):
-    # use pace tier for now
-    home_pace_tier = game['home']['pace']['tier']
-    away_tier = game['away']['pace']['tier']
+    home_pace_tier = game['home']['overall']['tier']
+    away_tier = game['away']['overall']['tier']
     if home_pace_tier == 3 or away_tier == 3:
         return 'D'
     elif home_pace_tier == 1 and away_tier == 1:

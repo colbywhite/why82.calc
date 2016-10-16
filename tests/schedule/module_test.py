@@ -64,21 +64,21 @@ class GradeScheduleTest(TestCase):
         eq_(expected_schedule, self.graded_schedule)
 
     def test_grade_a_grading(self):
-        game = self.get_single_game('WAS', '2016-02-03')
-        eq_(1, game['home']['pace']['tier'])
-        eq_(1, game['away']['pace']['tier'])
+        game = self.get_single_game('CLE', '2016-02-05')
+        eq_(1, game['home']['overall']['tier'])
+        eq_(1, game['away']['overall']['tier'])
         eq_('A', game['grade'])
 
     def test_grade_b_grading(self):
-        game = self.get_single_game('PHO', '2016-02-04')
-        eq_(1, game['home']['pace']['tier'])
-        eq_(2, game['away']['pace']['tier'])
+        game = self.get_single_game('CHO', '2016-02-03')
+        eq_(2, game['home']['overall']['tier'])
+        eq_(1, game['away']['overall']['tier'])
         eq_('B', game['grade'])
 
     def test_grade_c_grading(self):
-        game = self.get_single_game('PHI', '2016-02-03')
-        eq_(2, game['home']['pace']['tier'])
-        eq_(2, game['away']['pace']['tier'])
+        game = self.get_single_game('CHO', '2016-02-05')
+        eq_(2, game['home']['overall']['tier'])
+        eq_(2, game['away']['overall']['tier'])
         eq_('C', game['grade'])
 
     def get_single_game(self, home_abbrev, date_string):
