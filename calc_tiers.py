@@ -12,8 +12,9 @@ import why82.utils as utils
 
 def lambda_handler(event, context):
     key = event['Records'][0]['s3']['object']['key']
-    save_date = datetime.strptime(key,'2016/%Y-%m-%d-stats.json').date()
     season = settings.load_season_info(key.split('/')[0])
+    key_template = '%s/%%Y-%%m-%%d-stats.json' % season['name']
+    save_date = datetime.strptime(key,key_template).date()
     stats = S3Recorder.load_json_file(key, settings.STATS_BUCKET_NAME)
     print('Saving tiers for %s' % save_date)
     save_tiers(save_date, stats, season)
