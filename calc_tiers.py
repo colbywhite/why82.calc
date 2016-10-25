@@ -10,16 +10,6 @@ import why82.settings as settings
 import why82.utils as utils
 
 
-def build_file_name(save_date, season):
-    # correct the date for when it falls outside of the season boundaries
-    correct_date = save_date
-    if save_date < season['start']:
-        correct_date = season['start']
-    elif season['end'] < save_date:
-        correct_date = season['end']
-    return '%s/%s.json' % (season['name'], correct_date.strftime('%Y-%m-%d'))
-
-
 def lambda_handler(event, context):
     key = event['Records'][0]['s3']['object']['key']
     save_date = datetime.strptime(key,'2016/%Y-%m-%d-stats.json').date()
