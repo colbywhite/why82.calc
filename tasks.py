@@ -1,6 +1,7 @@
 from invoke import task
 import why82.infrastructure.deploy_stack as inf
 import why82.settings as settings
+from why82.s3_recorder import S3Recorder
 
 
 @task
@@ -37,3 +38,21 @@ def json(ctx):
 @task
 def season(ctx):
     print(settings.CURRENT_SEASON)
+
+
+@task
+def update_data(ctx):
+    stat_files = filter(lambda x :x.endswith('-stats.json'), S3Recorder.list_season_files(settings.CURRENT_SEASON, settings.STATS_BUCKET_NAME))
+    import calc_schedule
+    import calc_tiers
+    for stat_key in stat_files:
+        tiers_key = stat_key.replace('-stats.json', '-tiers.json')
+        schedule_key = stat_key.replace('-stats.json', '-schedule.json')
+        S3Recorder.rm_file(tiers_key, settings.BUCKET_NAME)
+        print 'Deleted', tiers_key
+        S3Recorder.rm_file(schedule_key, settings.BUCKET_NAME)
+        print 'Deleted', schedule_key
+        calc_tiers.lambda_handler({'Records':[{'s3':{'object':{'key': stat_key}}}]}, {})
+        print 'Created', tiers_key
+        calc_schedule.lambda_handler({'Records':[{'s3':{'object':{'key': tiers_key}}}]}, {})
+        print 'Created', schedule_key

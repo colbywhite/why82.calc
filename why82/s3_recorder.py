@@ -33,3 +33,15 @@ class S3Recorder:
         s3_client = boto3.client('s3')
         response = s3_client.get_object(Bucket=bucket, Key=key)
         return json.loads(response['Body'].read())
+
+    @staticmethod
+    def list_season_files(season, bucket=BUCKET_NAME):
+        s3 = boto3.resource('s3')
+        # summaries = s3.Bucket(bucket).objects.all()
+        summaries = s3.Bucket(bucket).objects.filter(Prefix=str(season['name']))
+        return map(lambda x:x.key,summaries)
+
+    @staticmethod
+    def rm_file(key, bucket=BUCKET_NAME):
+        s3_client = boto3.client('s3')
+        s3_client.delete_object(Bucket=bucket, Key=key)
