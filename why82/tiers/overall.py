@@ -10,11 +10,10 @@ def calc_overall(tiers, result={}):
     for name, info in tiers.iteritems():
         weighted_sum = Decimal(0)
         for metric, values in info.iteritems():
-            if metric == 'overall':
-                continue
-            weight = weights[metric]
-            weighted_val = values['tier'] * weight
-            weighted_sum += Decimal(weighted_val)
+            if metric != 'overall' and type(values) is dict:
+                weight = weights[metric]
+                weighted_val = values['tier'] * weight
+                weighted_sum += Decimal(weighted_val)
         weighted_avg = weighted_sum / total_weight
         team = result.get(name, {})
         team['overall'] = {'avg': weighted_avg, 'tier': calc_overall_tier(weighted_avg)}

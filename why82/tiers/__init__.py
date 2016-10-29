@@ -60,6 +60,13 @@ def calc_rating_diff(team_stats, result={}):
         result[name] = team
     return result
 
+def add_team_info(team_stats, result={}):
+    for name, stats in team_stats.iteritems():
+        result[name]['abbreviated_name'] = name
+        result[name]['short_name'] = stats['short_name']
+        result[name]['full_name'] = stats['full_name']
+    return result
+
 def calc(team_stats):
-    metric_tiers = calc_pace(team_stats, calc_win_loss(team_stats, calc_rating_diff(team_stats)))
+    metric_tiers = add_team_info(team_stats, calc_pace(team_stats, calc_win_loss(team_stats, calc_rating_diff(team_stats))))
     return overall.calc_overall(metric_tiers, copy.deepcopy(metric_tiers))
