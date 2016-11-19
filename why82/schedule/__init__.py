@@ -19,19 +19,20 @@ def get_single_day_schedule(start_date, offset):
     if len(game_strings) == 0:
         return {}
     date = parse_game_date(game_strings[0][5])
-    games = map(lambda x: parse_game_teams(x), game_strings)
+    games = map(lambda x: parse_game_teams(date, x), game_strings)
     return {date: games}
 
 
-def parse_game_teams(game_info):
+def parse_game_teams(date, game_info):
     teams = game_info[5].split('/')[1]
     away_abbr = correct_abbreviations(teams[:3])
     home_abbr = correct_abbreviations(teams[3:])
-    time = parse_eastern_time(game_info[0]).strftime('%Y-%m-%dT%H:%M:%S%z')
+    time = parse_eastern_time(date, game_info[4]).strftime('%Y-%m-%dT%H:%M:%S%z')
     return {'home': home_abbr, 'away': away_abbr, 'time': time}
 
-def parse_eastern_time(time_str):
-    tz_naive = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S')
+def parse_eastern_time(date, human_time_str):
+    time_str = date.strftime('%Y-%m-%d ') + human_time_str
+    tz_naive = datetime.strptime(time_str, '%Y-%m-%d %H:%M %p ET')
     return EASTERN.localize(tz_naive)
 
 def parse_game_date(game_info):
