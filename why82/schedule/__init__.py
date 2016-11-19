@@ -28,12 +28,19 @@ def parse_game_teams(date, game_info):
     away_abbr = correct_abbreviations(teams[:3])
     home_abbr = correct_abbreviations(teams[3:])
     time = parse_eastern_time(date, game_info[4]).strftime('%Y-%m-%dT%H:%M:%S%z')
-    return {'home': home_abbr, 'away': away_abbr, 'time': time}
+    nat_tv = parse_national_tv(game_info[11])
+    return {'home': home_abbr, 'away': away_abbr, 'time': time, "nat_tv": nat_tv}
 
 def parse_eastern_time(date, human_time_str):
     time_str = date.strftime('%Y-%m-%d ') + human_time_str
     tz_naive = datetime.strptime(time_str, '%Y-%m-%d %H:%M %p ET')
     return EASTERN.localize(tz_naive)
+
+def parse_national_tv(human_tv_string):
+    if human_tv_string:
+        return human_tv_string.strip().replace(' ', '').lower()
+    else:
+        return None
 
 def parse_game_date(game_info):
     date_string = game_info.split('/')[0]
@@ -55,7 +62,8 @@ def grade_schedule(schedule, tiers):
             away_abbrev = game['away']
             graded_game = {'home': deepcopy(tiers[home_abbrev]),
                            'away': deepcopy(tiers[away_abbrev]),
-                           'time': game['time']}
+                           'time': game['time'],
+                           'nat_tv': game['nat_tv']}
             graded_game['home']['abbreviated_name'] = home_abbrev
             graded_game['away']['abbreviated_name'] = away_abbrev
             graded_game['grade'] = grade_game(graded_game)
