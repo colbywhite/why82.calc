@@ -1,10 +1,11 @@
 from copy import deepcopy
 from datetime import datetime
-
+import pytz
 import nba_api_client as nba
 
 ABBREVIATION_ADJUSTMENTS = {'PHX': 'PHO', 'CHA': 'CHO', 'BKN': 'BRK'}
 INCORRECT_ABBREVIATIONS = ABBREVIATION_ADJUSTMENTS.keys()
+EASTERN = pytz.timezone('US/Eastern')
 
 
 def get_multi_day_schedule(start_date, num=7):
@@ -18,16 +19,20 @@ def get_single_day_schedule(start_date, offset):
     if len(game_strings) == 0:
         return {}
     date = parse_game_date(game_strings[0][5])
-    games = map(lambda x: parse_game_teams(x[5]), game_strings)
+    games = map(lambda x: parse_game_teams(x), game_strings)
     return {date: games}
 
 
 def parse_game_teams(game_info):
-    teams = game_info.split('/')[1]
+    teams = game_info[5].split('/')[1]
     away_abbr = correct_abbreviations(teams[:3])
     home_abbr = correct_abbreviations(teams[3:])
-    return {'home': home_abbr, 'away': away_abbr}
+    time = parse_eastern_time(game_info[0]).strftime('%Y-%m-%dT%H:%M:%S%z')
+    return {'home': home_abbr, 'away': away_abbr, 'time': time}
 
+def parse_eastern_time(time_str):
+    tz_naive = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%S')
+    return EASTERN.localize(tz_naive)
 
 def parse_game_date(game_info):
     date_string = game_info.split('/')[0]
@@ -48,7 +53,8 @@ def grade_schedule(schedule, tiers):
             home_abbrev = game['home']
             away_abbrev = game['away']
             graded_game = {'home': deepcopy(tiers[home_abbrev]),
-                           'away': deepcopy(tiers[away_abbrev])}
+                           'away': deepcopy(tiers[away_abbrev]),
+                           'time': game['time']}
             graded_game['home']['abbreviated_name'] = home_abbrev
             graded_game['away']['abbreviated_name'] = away_abbrev
             graded_game['grade'] = grade_game(graded_game)
