@@ -34,7 +34,6 @@ def parse_game_teams(date, game_info):
 def parse_eastern_time(date, human_time_str):
     time_str = date.strftime('%Y-%m-%d ') + human_time_str
     tz_naive = datetime.strptime(time_str, '%Y-%m-%d %I:%M %p ET')
-    print('parse_eastern_time(', date, human_time_str,')=',tz_naive)
     return EASTERN.localize(tz_naive)
 
 def parse_national_tv(human_tv_string):
