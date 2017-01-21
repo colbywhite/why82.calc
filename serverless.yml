@@ -18,7 +18,7 @@ provider:
   name: aws
   runtime: python2.7
   region: us-west-2
-  timeout: 30
+  timeout: 100
   stage: dev
   iamRoleStatements:
     - Effect: Allow
