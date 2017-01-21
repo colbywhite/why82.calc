@@ -2,16 +2,26 @@ from copy import deepcopy
 from datetime import datetime
 import pytz
 import nba_api_client as nba
+from multiprocessing import Pool
 
 ABBREVIATION_ADJUSTMENTS = {'PHX': 'PHO', 'CHA': 'CHO', 'BKN': 'BRK'}
 INCORRECT_ABBREVIATIONS = ABBREVIATION_ADJUSTMENTS.keys()
 EASTERN = pytz.timezone('US/Eastern')
 
+class ScheduleRetriever(object):
+    def __init__(self, start_date):
+        self.start_date = start_date
+    def __call__(self, offset):
+        return get_single_day_schedule(self.start_date, offset)
+
 
 def get_multi_day_schedule(start_date, num=7):
-    return reduce(lambda result, offset:
-                  dict(result.items() + get_single_day_schedule(start_date, offset).items()),
-                  range(0, num), {})
+    p = Pool(num)
+    results = p.map(ScheduleRetriever(start_date), range(0,num))
+    p.close()
+    return reduce(lambda r, single_day:
+                  dict(r.items() + single_day.items()),
+                  results, {})
 
 
 def get_single_day_schedule(start_date, offset):
