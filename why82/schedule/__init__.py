@@ -56,6 +56,7 @@ def correct_abbreviations(abbr):
 def grade_schedule(schedule, tiers):
     result = {}
     for day in schedule.keys():
+        print('Grading schedule for day %s' % day)
         graded_games = []
         for game in schedule[day]:
             home_abbrev = game['home']
