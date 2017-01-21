@@ -18,7 +18,6 @@ provider:
   name: aws
   runtime: python2.7
   region: us-west-2
-  timeout: 100
   stage: dev
   iamRoleStatements:
     - Effect: Allow
@@ -70,8 +69,10 @@ package:
 functions:
   tiers:
     handler: calc_tiers.lambda_handler
+    timeout: 30
   schedule:
     handler: calc_schedule.lambda_handler
+    timeout: 100
 
 resources:
   Resources:
