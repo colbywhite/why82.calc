@@ -72,14 +72,15 @@ def grade_schedule(schedule, tiers):
         for game in schedule[day]:
             home_abbrev = game['home']
             away_abbrev = game['away']
-            graded_game = {'home': deepcopy(tiers[home_abbrev]),
-                           'away': deepcopy(tiers[away_abbrev]),
-                           'time': game['time'],
-                           'nat_tv': game['nat_tv']}
-            graded_game['home']['abbreviated_name'] = home_abbrev
-            graded_game['away']['abbreviated_name'] = away_abbrev
-            graded_game['grade'] = grade_game(graded_game)
-            graded_games.append(graded_game)
+            if home_abbrev != 'WST' or away_abbrev != 'EST':
+                graded_game = {'home': deepcopy(tiers[home_abbrev]),
+                               'away': deepcopy(tiers[away_abbrev]),
+                               'time': game['time'],
+                               'nat_tv': game['nat_tv']}
+                graded_game['home']['abbreviated_name'] = home_abbrev
+                graded_game['away']['abbreviated_name'] = away_abbrev
+                graded_game['grade'] = grade_game(graded_game)
+                graded_games.append(graded_game)
         formatted_day = day.strftime('%Y-%m-%d')
         result[formatted_day] = graded_games
     return result
