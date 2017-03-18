@@ -72,7 +72,7 @@ functions:
     timeout: 30
   schedule:
     handler: calc_schedule.lambda_handler
-    timeout: 100
+    timeout: 300
 
 resources:
   Resources:
