@@ -23,7 +23,7 @@ def lambda_handler(event, context):
 
 def calc_schedule(start_date, num):
     print('calc_schedule(%s, %s)' % (start_date, num))
-    return sked.get_multi_day_schedule(start_date, num)
+    return sked.multi_day_sked(start_date, num)
 
 
 def grade_schedule(start_date, num, tiers):
