@@ -73,6 +73,7 @@ def full_sked():
 
 def multi_day_sked(date, num_days):
     results = map(ScheduleRetriever(date), range(0, num_days))
+    days_with_games = list(filter(lambda x: len(x)>1, results))
     return reduce(lambda r, single_day:
                     dict(r.items() + dict([(single_day[0]['gdte'], single_day)]).items()),
-                    results, {})
+                    days_with_games, {})
